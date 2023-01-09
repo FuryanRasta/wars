@@ -1,0 +1,764 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: Wars Module Extension of Gaia-Lite for Cosmos
+  description: An extension of Gaia-Lite for Wars Module related state queries, transaction generation and broadcasting.
+tags:
+  - name: Wars Module
+    description: A module for universal token waring curves
+schemes:
+  - http
+host: localhost:1317
+paths:
+  /wars:
+    get:
+      description: List of all currently active wars
+      summary: List of all active wars
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      responses:
+        200:
+          description: List of wars by token name
+          schema:
+            type: array
+            items:
+              type: string
+              example: abc
+  /wars/{war_token}:
+    get:
+      description: Information about the war
+      summary: The properties of the war
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+      responses:
+        200:
+          description: War details
+          schema:
+            $ref: "#/definitions/WarQueryResult"
+  /wars/{war_token}/batch:
+    get:
+      description: War's current batch with current list of buy and sell orders
+      summary: Current orders batch of the war
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+      responses:
+        200:
+          description: Current batch
+          schema:
+            $ref: "#/definitions/BatchQueryResult"
+  /wars/{war_token}/last_batch:
+    get:
+      description: War's last batch with last list of buy and sell orders
+      summary: Last orders batch of the war
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+      responses:
+        200:
+          description: Last batch
+          schema:
+            $ref: "#/definitions/BatchQueryResult"
+  /wars/{war_token}/current_price:
+    get:
+      description: Computes the current price(s) of the war
+      summary: Current price(s) of the war
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+      responses:
+        200:
+          description: Current price(s) of the war
+          schema:
+            $ref: "#/definitions/ResCoins"
+  /wars/{war_token}/current_reserve:
+    get:
+      description: Obtains the reserve pool balance(s) of the war
+      summary: Current balance(s) of the reserve pool
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+      responses:
+        200:
+          description: Current balance(s) of the reserve pool
+          schema:
+            $ref: "#/definitions/ResCoins"
+  /wars/{war_token}/price/{war_amount}:
+    get:
+      description: Computes the price(s) of the war at a specific amount of supply
+      summary: Price(s) of the war at a specific supply
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+        - in: path
+          name: war_amount
+          description: Number of war tokens
+          required: true
+          type: number
+          x-example: 100
+      responses:
+        200:
+          description: Price(s) to buy the tokens
+          schema:
+            $ref: "#/definitions/ResCoins"
+  /wars/{war_token}/buy_price/{war_amount}:
+    get:
+      description: Computes the price(s) to buy an amount of tokens of the war
+      summary: Price(s) of buying an amount of tokens of the war
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+        - in: path
+          name: war_amount
+          description: Number of war tokens
+          required: true
+          type: number
+          x-example: 100
+      responses:
+        200:
+          description: Price(s) to buy the tokens
+          schema:
+            $ref: "#/definitions/BuyPriceQueryResult"
+  /wars/{war_token}/sell_return/{war_amount}:
+    get:
+      description: Computes the return on selling an amount of tokens of the war
+      summary: Return on selling an amount of tokens of the war
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+        - in: path
+          name: war_amount
+          description: Number of war tokens
+          required: true
+          type: number
+          x-example: 100
+      responses:
+        200:
+          description: Return when selling the tokens
+          schema:
+            $ref: "#/definitions/SellReturnQueryResult"
+  /wars/{war_token}/swap_return/{from_token_with_amount}/{to_token}:
+    get:
+      description: Computes the return on an amount of tokens by swapping
+      summary: Return on an amount of tokens by swapping
+      tags:
+        - Wars Module
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: war_token
+          description: War token
+          required: true
+          type: string
+          x-example: abc
+        - in: path
+          name: from_token_with_amount
+          description: Number of reserve tokens
+          required: true
+          type: number
+          x-example: 100res1
+        - in: path
+          name: to_token
+          description: Reserve token
+          required: true
+          type: string
+          x-example: res2
+      responses:
+        200:
+          description: Return on an amount of tokens by swapping
+          schema:
+            $ref: "#/definitions/SwapReturnQueryResult"
+  /wars/create_war:
+    post:
+      description: Create a war
+      summary: Create a war
+      tags:
+        - Wars Module
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: create_war_body
+          description: The parameters of the war and corresponding waring curve
+          schema:
+            $ref: "#/definitions/WarCreation"
+  /wars/edit_war:
+    post:
+      description: Edit a war
+      summary: Edit a war
+      tags:
+        - Wars Module
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: edit_war_body
+          description: The fields to be edited and the list of the war's signers
+          schema:
+            $ref: "#/definitions/WarEdit"
+  /wars/buy:
+    post:
+      description: Buy tokens from a war
+      summary: Buy from a war. In the case of a swapper war, this adds liquidity.
+      tags:
+        - Wars Module
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: buy_from_war_body
+          description: Number of tokens to buy and max price
+          schema:
+            type: object
+            properties:
+              base_req:
+                $ref: "#/definitions/BaseReq"
+              war_token:
+                type: string
+                example: abc
+              war_amount:
+                type: string
+                example: 100
+              max_prices:
+                type: string
+                example: 1000res1,1000res2,...
+  /wars/sell:
+    post:
+      description: Sell tokens from a war
+      summary: Sell from a war. In the case of a swapper war, this adds liquidity.
+      tags:
+        - Wars Module
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: sell_from_war_body
+          description: Number of tokens to sell
+          schema:
+            type: object
+            properties:
+              base_req:
+                $ref: "#/definitions/BaseReq"
+              war_token:
+                type: string
+                example: abc
+              war_amount:
+                type: string
+                example: 100
+  /wars/swap:
+    post:
+      description: Perform a swap between two tokens using a swapper war
+      summary: Swap two tokens
+      tags:
+        - Wars Module
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: swap_tokens_body
+          description: The number of tokens to swap to another token
+          schema:
+            type: object
+            properties:
+              base_req:
+                $ref: "#/definitions/BaseReq"
+              from_amount:
+                type: string
+                example: 100
+              from_token:
+                type: string
+                example: res1
+              to_token:
+                type: string
+                example: res2
+  /wars/make_outcome_payment:
+    post:
+      description: Make an outcome payment to a war to progress it to SETTLE state
+      summary: Make outcome payment
+      tags:
+        - Wars Module
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: make_outcome_payment_body
+          description: The war token to make the outcome payment to
+          schema:
+            type: object
+            properties:
+              base_req:
+                $ref: "#/definitions/BaseReq"
+              war_token:
+                type: string
+                example: abc
+  /wars/withdraw_share:
+    post:
+      description: As a war token holder, withdraw the reserve tokens share from a war in SETTLE state
+      summary: Withdraw share from war
+      tags:
+        - Wars Module
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: withdraw_share_body
+          description: The war token to withdraw the share from
+          schema:
+            type: object
+            properties:
+              base_req:
+                $ref: "#/definitions/BaseReq"
+              war_token:
+                type: string
+                example: abc
+definitions:
+  StakeCoin:
+    type: object
+    properties:
+      denom:
+        type: string
+        example: stake
+      amount:
+        type: string
+        example: 50
+  StakeCoins:
+    type: array
+    items:
+      $ref: "#/definitions/StakeCoin"
+  AnyCoin:
+    type: object
+    properties:
+      denom:
+        type: string
+        example: abc
+      amount:
+        type: string
+        example: 50
+  AnyCoins:
+    type: array
+    items:
+      $ref: "#/definitions/AnyCoin"
+  ResCoin:
+    type: object
+    properties:
+      denom:
+        type: string
+        example: res
+      amount:
+        type: string
+        example: 50
+  ResCoins:
+    type: array
+    items:
+      $ref: "#/definitions/ResCoin"
+  WarCoin:
+    type: object
+    properties:
+      denom:
+        type: string
+        example: war
+      amount:
+        type: string
+        example: 50
+  WarCoins:
+    type: array
+    items:
+      $ref: "#/definitions/WarCoin"
+  Address:
+    type: string
+    description: bech32 encoded address
+  BaseOrder:
+    type: object
+    properties:
+      buyer:
+        $ref: "#/definitions/Address"
+      amount:
+        $ref: "#/definitions/WarCoin"
+      cancelled:
+        type: string
+        example: "false"
+      cancel_reason:
+        type: string
+        example: "reason for cancellation"
+  BaseOrderSwap:
+    type: object
+    properties:
+      buyer:
+        $ref: "#/definitions/Address"
+      amount:
+        $ref: "#/definitions/ResCoin"
+      cancelled:
+        type: string
+        example: "false"
+      cancel_reason:
+        type: string
+        example: "reason for cancellation"
+  BuyOrder:
+    type: object
+    properties:
+      base_order:
+        $ref: "#/definitions/BaseOrder"
+      max_prices:
+        $ref: "#/definitions/ResCoins"
+  SellOrder:
+    type: object
+    properties:
+      base_order:
+        $ref: "#/definitions/BaseOrder"
+  SwapOrder:
+    type: object
+    properties:
+      base_order:
+        $ref: "#/definitions/BaseOrderSwap"
+      to_token:
+        type: string
+        example: res2
+  Batch:
+    type: object
+    properties:
+      blocks_remaining:
+        type: number
+        example: 2
+      total_buy_amount:
+        type: number
+        example: 1000
+      total_sell_amount:
+        type: number
+        example: 1000
+      buy_price:
+        type: number
+        example: 2.5
+      sell_price:
+        type: number
+        example: 2.5
+      buys:
+        type: array
+        items:
+          $ref: "#/definitions/BuyOrder"
+      sells:
+        type: array
+        items:
+          $ref: "#/definitions/SellOrder"
+      swaps:
+        type: array
+        items:
+          $ref: "#/definitions/SwapOrder"
+  WarQueryResult:
+    type: object
+    properties:
+      type:
+        type: string
+        example: cosmos-sdk/War
+      value:
+        type: object
+        properties:
+          token:
+            type: string
+            example: abc
+          name:
+            type: string
+            example: Some war
+          description:
+            type: string
+            example: Description about war.
+          creator:
+            $ref: "#/definitions/Address"
+          function_type:
+            type: string
+            example: power_function
+          function_parameters:
+            $ref: "#/definitions/FunctionParameters"
+          reserve_tokens:
+            type: array
+            items:
+              type: string
+              example: res1
+          reserve_address:
+            $ref: "#/definitions/Address"
+          tx_fee_percentage:
+            type: number
+            example: 0.5
+          exit_fee_percentage:
+            type: number
+            example: 1.5
+          fee_address:
+            $ref: "#/definitions/Address"
+          max_supply:
+            $ref: "#/definitions/WarCoin"
+          order_quantity_limits:
+            $ref: "#/definitions/AnyCoins"
+          sanity_rate:
+            type: number
+            example: 12.34
+          sanity_margin_percentage:
+            type: number
+            example: 56.78
+          current_supply:
+            $ref: "#/definitions/WarCoin"
+          allow_sells:
+            type: string
+            example: "true"
+          signers:
+            type: array
+            items:
+              $ref: "#/definitions/Address"
+          batch_blocks:
+            type: number
+            example: 5
+          outcome_payment:
+            order_quantity_limits:
+              $ref: "#/definitions/AnyCoins"
+          state:
+            type: string
+            example: OPEN
+  BatchQueryResult:
+    type: object
+    properties:
+      type:
+        type: string
+        example: cosmos-sdk/Batch
+      value:
+        $ref: "#/definitions/Batch"
+  BuyPriceQueryResult:
+    type: object
+    properties:
+      adjusted_supply:
+        $ref: "#/definitions/ResCoins"
+      prices:
+        $ref: "#/definitions/ResCoins"
+      tx_fees:
+        $ref: "#/definitions/ResCoins"
+      total_prices:
+        $ref: "#/definitions/ResCoins"
+      total_fees:
+        $ref: "#/definitions/ResCoins"
+  SellReturnQueryResult:
+    type: object
+    properties:
+      adjusted_supply:
+        $ref: "#/definitions/ResCoins"
+      returns:
+        $ref: "#/definitions/ResCoins"
+      tx_fees:
+        $ref: "#/definitions/ResCoins"
+      exit_fees:
+        $ref: "#/definitions/ResCoins"
+      total_returns:
+        $ref: "#/definitions/ResCoins"
+      total_fees:
+        $ref: "#/definitions/ResCoins"
+  SwapReturnQueryResult:
+    type: object
+    properties:
+      total_returns:
+        $ref: "#/definitions/ResCoins"
+      total_fees:
+        $ref: "#/definitions/ResCoins"
+  BaseReq:
+    type: object
+    properties:
+      from:
+        type: string
+        example: "cosmos1g9ahr6xhht5rmqven628nklxluzyv8z9jqjcmc"
+        description: Sender address or Keybase name to generate a transaction
+      memo:
+        type: string
+        example: "Sent via Cosmos Voyager 🚀"
+      chain_id:
+        type: string
+        example: "Cosmos-Hub"
+      account_number:
+        type: string
+        example: "0"
+      sequence:
+        type: string
+        example: "1"
+      gas:
+        type: string
+        example: "200000"
+      gas_adjustment:
+        type: string
+        example: "1.2"
+      fees:
+        $ref: "#/definitions/StakeCoins"
+      simulate:
+        type: boolean
+        example: false
+        description: Estimate gas for a transaction (cannot be used in conjunction with generate_only)
+  WarCreation:
+    type: object
+    properties:
+      base_req:
+        $ref: "#/definitions/BaseReq"
+      token:
+        type: string
+        example: abc
+      name:
+        type: string
+        example: War Name
+      description:
+        type: string
+        example: Description about war.
+      function_type:
+        type: string
+        example: power_function
+      function_parameters:
+        type: string
+        example: "m:12,n:2,c:100"
+      reserve_tokens:
+        type: string
+        example: res1,res2,...
+      tx_fee_percentage:
+        type: string
+        example: "0.5"
+      exit_fee_percentage:
+        type: string
+        example: "1.5"
+      fee_address:
+        $ref: "#/definitions/Address"
+      max_supply:
+        type: string
+        example: "1000abc"
+      order_quantity_limits:
+        type: string
+        example: 100abc,200xyz,...
+      sanity_rate:
+        type: string
+        example: "12.34"
+      sanity_margin_percentage:
+        type: string
+        example: "56.78"
+      allow_sells:
+        type: string
+        example: "true"
+      signers:
+        type: string
+        example: "cosmos1qns07zjjsllfc6w7486f7v2nvyfsq30myn3nje,cosmos1qns07zjjsllfc6w7486f7v2nvyfsq30myn3nje"
+      batch_blocks:
+        type: string
+        example: "5"
+      outcome_payment:
+        type: string
+        example: 100abc,200xyz,...
+  WarEdit:
+    type: object
+    properties:
+      base_req:
+        $ref: "#/definitions/BaseReq"
+      token:
+        type: string
+        example: abc
+      name:
+        type: string
+        example: New War Name
+      description:
+        type: string
+        example: New description about war.
+      order_quantity_limits:
+        type: string
+        example: 100abc,200xyz,...
+      sanity_rate:
+        type: string
+        example: "12.34"
+      sanity_margin_percentage:
+        type: string
+        example: "56.78"
+      signers:
+        type: string
+        example: "cosmos1qns07zjjsllfc6w7486f7v2nvyfsq30myn3nje,cosmos1qns07zjjsllfc6w7486f7v2nvyfsq30myn3nje"
+  FunctionParameter:
+    type: object
+    properties:
+      param:
+        type: string
+        example: "a"
+      value:
+        type: string
+        example: "1.1"
+  FunctionParameters:
+    type: array
+    items:
+      $ref: "#/definitions/FunctionParameter"

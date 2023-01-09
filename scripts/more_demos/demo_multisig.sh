@@ -3,7 +3,7 @@
 wait() {
   echo "Waiting for chain to start..."
   while :; do
-    RET=$(bondscli status 2>&1)
+    RET=$(warscli status 2>&1)
     if [[ ($RET == ERROR*) || ($RET == *'"latest_block_height": "0"'*) ]]; then
       sleep 1
     else
@@ -17,17 +17,17 @@ wait() {
 tx_from_m() {
   cmd=$1
   shift
-  yes $PASSWORD | bondscli tx bonds "$cmd" --from miguel --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
+  yes $PASSWORD | warscli tx wars "$cmd" --from miguel --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
 }
 
 tx_from_f() {
   cmd=$1
   shift
-  yes $PASSWORD | bondscli tx bonds "$cmd" --from francesco --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
+  yes $PASSWORD | warscli tx wars "$cmd" --from francesco --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
 }
 
-create_bond_multisig() {
-  bondscli tx bonds create-bond \
+create_war_multisig() {
+  warscli tx wars create-war \
     --token=abc \
     --name="A B C" \
     --description="Description about A B C" \
@@ -42,50 +42,50 @@ create_bond_multisig() {
     --sanity-rate="0" \
     --sanity-margin-percentage="0" \
     --allow-sells \
-    --signers="$(bondscli keys show francesco --keyring-backend=test -a),$(bondscli keys show shaun --keyring-backend=test -a)" \
+    --signers="$(warscli keys show francesco --keyring-backend=test -a),$(warscli keys show shaun --keyring-backend=test -a)" \
     --batch-blocks=1 \
     --from="$MIGUEL" -y --broadcast-mode block --generate-only >multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=francesco --output-document=multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=shaun --output-document=multisig.json
-  bondscli tx broadcast multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=francesco --output-document=multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=shaun --output-document=multisig.json
+  warscli tx broadcast multisig.json
   rm multisig.json
 }
 
-RET=$(bondscli status 2>&1)
+RET=$(warscli status 2>&1)
 if [[ ($RET == ERROR*) || ($RET == *'"latest_block_height": "0"'*) ]]; then
   wait
 fi
 
 PASSWORD="12345678"
 GAS_PRICES="0.025stake"
-MIGUEL=$(yes $PASSWORD | bondscli keys show miguel --keyring-backend=test -a)
-FRANCESCO=$(yes $PASSWORD | bondscli keys show francesco --keyring-backend=test -a)
-SHAUN=$(yes $PASSWORD | bondscli keys show shaun --keyring-backend=test -a)
-FEE=$(yes $PASSWORD | bondscli keys show fee --keyring-backend=test -a)
+MIGUEL=$(yes $PASSWORD | warscli keys show miguel --keyring-backend=test -a)
+FRANCESCO=$(yes $PASSWORD | warscli keys show francesco --keyring-backend=test -a)
+SHAUN=$(yes $PASSWORD | warscli keys show shaun --keyring-backend=test -a)
+FEE=$(yes $PASSWORD | warscli keys show fee --keyring-backend=test -a)
 
-echo "Creating bond..."
-create_bond_multisig
+echo "Creating war..."
+create_war_multisig
 echo "Waiting a bit..."
 sleep 5
-echo "Created bond..."
-bondscli q bonds bond abc
+echo "Created war..."
+warscli q wars war abc
 
 echo "Miguel buys 10abc..."
 tx_from_m buy 10abc 1000000res
 echo "Miguel's account..."
-bondscli q auth account "$MIGUEL"
+warscli q auth account "$MIGUEL"
 
 echo "Francesco buys 10abc..."
 tx_from_f buy 10abc 1000000res
 echo "Francesco's account..."
-bondscli q auth account "$FRANCESCO"
+warscli q auth account "$FRANCESCO"
 
 echo "Miguel sells 10abc..."
 tx_from_m sell 10abc
 echo "Miguel's account..."
-bondscli q auth account "$MIGUEL"
+warscli q auth account "$MIGUEL"
 
 echo "Francesco sells 10abc..."
 tx_from_f sell 10abc
 echo "Francesco's account..."
-bondscli q auth account "$FRANCESCO"
+warscli q auth account "$FRANCESCO"

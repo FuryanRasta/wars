@@ -47,9 +47,9 @@ build_tags_comma_sep := $(subst $(whitespace),$(comma),$(build_tags))
 
 # process linker flags
 
-ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=bonds \
-		  -X github.com/cosmos/cosmos-sdk/version.ServerName=bondsd \
-		  -X github.com/cosmos/cosmos-sdk/version.ClientName=bondscli \
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=wars \
+		  -X github.com/cosmos/cosmos-sdk/version.ServerName=wars \
+		  -X github.com/cosmos/cosmos-sdk/version.ClientName=warscli \
 		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
 		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)"
@@ -68,19 +68,19 @@ all: lint install
 
 build: go.sum
 ifeq ($(OS),Windows_NT)
-	go build -mod=readonly $(BUILD_FLAGS) -o build/bondsd.exe ./cmd/bondsd
-	go build -mod=readonly $(BUILD_FLAGS) -o build/bondscli.exe ./cmd/bondscli
+	go build -mod=readonly $(BUILD_FLAGS) -o build/wars.exe ./cmd/wars
+	go build -mod=readonly $(BUILD_FLAGS) -o build/warscli.exe ./cmd/warscli
 else
-	go build -mod=readonly $(BUILD_FLAGS) -o build/bondsd ./cmd/bondsd
-	go build -mod=readonly $(BUILD_FLAGS) -o build/bondscli ./cmd/bondscli
+	go build -mod=readonly $(BUILD_FLAGS) -o build/wars ./cmd/wars
+	go build -mod=readonly $(BUILD_FLAGS) -o build/warscli ./cmd/warscli
 endif
 
 build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
 
 install: go.sum
-	go install -mod=readonly $(BUILD_FLAGS) ./cmd/bondsd
-	go install -mod=readonly $(BUILD_FLAGS) ./cmd/bondscli
+	go install -mod=readonly $(BUILD_FLAGS) ./cmd/wars
+	go install -mod=readonly $(BUILD_FLAGS) ./cmd/warscli
 
 ########################################
 ### Tools & dependencies
@@ -96,7 +96,7 @@ go.sum: go.mod
 draw-deps:
 	@# requires brew install graphviz or apt-get install graphviz
 	go get github.com/RobotsAndPencils/goviz
-	@goviz -i ./cmd/bondsd -d 2 | dot -Tpng -o dependency-graph.png
+	@goviz -i ./cmd/wars -d 2 | dot -Tpng -o dependency-graph.png
 
 clean:
 	rm -rf snapcraft-local.yaml build/

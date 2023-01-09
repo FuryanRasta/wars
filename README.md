@@ -1,22 +1,22 @@
-# Bonds Module
+# Wars Module
 
-The Bonds module is a custom [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) module that provides universal token bonding curve functions to mint, burn or swap any token in a Cosmos blockchain.
+The Wars module is a custom [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) module that provides universal token waring curve functions to mint, burn or swap any token in a Cosmos blockchain.
 
 In the future, once the Cosmos Inter-Blockchain Communication \(IBC\) protocol is available, this should enable cross-network exchanges of tokens at algorithmically-determined prices.
 
-The Bonds module can be deployed through Cosmos Hubs and Zones to deliver applications such as:
+The Wars module can be deployed through Cosmos Hubs and Zones to deliver applications such as:
 
 * Automated market-makers \(see [Uniswap](https://uniswap.io)\)
 * Decentralised exchanges \(see [Bancor](https://bancor.network)\)
-* Curation markets \(see [Relevant](https://github.com/relevant-community/contracts/tree/bondingCurves/contracts)\)
-* Development Impact Bonds \(see ixo alpha-Bonds\)
+* Curation markets \(see [Relevant](https://github.com/relevant-community/contracts/tree/waringCurves/contracts)\)
+* Development Impact Wars \(see ixo alpha-Wars\)
 * Continuous organisations \(see [Moloch DAO](https://molochdao.com/)\)
 
 > [Hayek famously said](https://books.google.co.uk/books?id=Udi_BwAAQBAJ&pg=PA32&lpg=PA32&dq=%22prices+are+an+instrument+of+communication+and+guidance+which+embody+more+information+than+we+directly+have%22&source=bl&ots=LMFRhcW0QS&sig=ACfU3U0I6_J3_uBI96ZFKAxCo-p6yh_eNg&hl=en&sa=X&ved=2ahUKEwimguWHpOjmAhWFTBUIHQCYASYQ6AEwAnoECAkQAQ#v=onepage&q=%22prices%20are%20an%20instrument%20of%20communication%20and%20guidance%20which%20embody%20more%20information%20than%20we%20directly%20have%22&f=false) that "...prices are an instrument of communication and guidance which embody more information than we directly have".
 
 ## Module functions
 
-Any Cosmos application chain that implements the Bonds module is able to perform functions such as:
+Any Cosmos application chain that implements the Wars module is able to perform functions such as:
 
 * Issue a new token with custom parameters.
 * Pool liquidity for reserves.
@@ -30,7 +30,7 @@ Any Cosmos application chain that implements the Bonds module is able to perform
 
 ## Pricing algorithm libraries
 
-The Bonds module framework supports libraries for all types of pricing algorithms, such as:
+The Wars module framework supports libraries for all types of pricing algorithms, such as:
 
 * Exponential
 * Logarithmic
@@ -49,7 +49,7 @@ Updates to the module pricing functions must pass through a network governance p
 
 ## Parameters
 
-Each bond has an initial set of constant state \(invariant\) parameters that cannot be updated once these have been initialised. Parameters include:
+Each war has an initial set of constant state \(invariant\) parameters that cannot be updated once these have been initialised. Parameters include:
 
 * Pricing function \(the algorithm that will be used\)
 * Issuer
@@ -63,13 +63,13 @@ Each bond has an initial set of constant state \(invariant\) parameters that can
 * Order quantity limits
 * Sanity rates
 
-When a bond transaction \(such as buy, sell, swap\) is submitted, this includes the variable parameters:
+When a war transaction \(such as buy, sell, swap\) is submitted, this includes the variable parameters:
 
 * Order quantity
 * Maximum price
 * Wallet address
 
-Some of the parameters of the bond may be edited:
+Some of the parameters of the war may be edited:
 
 * Token name
 * Sanity rates
@@ -79,7 +79,7 @@ Some of the parameters of the bond may be edited:
 
 **Note**: Requires [Go 1.13+](https://golang.org/dl/)
 
-This repository is set up as a Cosmos SDK application and contains the Bonds module under `./x/bonds/`.
+This repository is set up as a Cosmos SDK application and contains the Wars module under `./x/wars/`.
 
 To build and run the application:
 
@@ -109,8 +109,8 @@ make demo
 
 The demo consists of:
 
-* Bond creation
-* Bond querying
+* War creation
+* War querying
 * A mix of buys and sells
 
 To run a more specific demo, check out the `scripts/more_demos/` folder.

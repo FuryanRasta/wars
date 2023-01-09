@@ -3,7 +3,7 @@
 wait() {
   echo "Waiting for chain to start..."
   while :; do
-    RET=$(bondscli status 2>&1)
+    RET=$(warscli status 2>&1)
     if [[ ($RET == ERROR*) || ($RET == *'"latest_block_height": "0"'*) ]]; then
       sleep 1
     else
@@ -17,17 +17,17 @@ wait() {
 tx_from_m() {
   cmd=$1
   shift
-  yes $PASSWORD | bondscli tx bonds "$cmd" --from miguel --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
+  yes $PASSWORD | warscli tx wars "$cmd" --from miguel --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
 }
 
 tx_from_f() {
   cmd=$1
   shift
-  yes $PASSWORD | bondscli tx bonds "$cmd" --from francesco --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
+  yes $PASSWORD | warscli tx wars "$cmd" --from francesco --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
 }
 
-create_bond_multisig() {
-  bondscli tx bonds create-bond \
+create_war_multisig() {
+  warscli tx wars create-war \
     --token=abc \
     --name="A B C" \
     --description="Description about A B C" \
@@ -42,89 +42,89 @@ create_bond_multisig() {
     --sanity-rate="0" \
     --sanity-margin-percentage="0" \
     --allow-sells \
-    --signers="$(bondscli keys show francesco --keyring-backend=test -a),$(bondscli keys show shaun --keyring-backend=test -a)" \
+    --signers="$(warscli keys show francesco --keyring-backend=test -a),$(warscli keys show shaun --keyring-backend=test -a)" \
     --batch-blocks=1 \
     --from="$MIGUEL" -y --broadcast-mode block --generate-only >multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=francesco --output-document=multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=shaun --output-document=multisig.json
-  bondscli tx broadcast multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=francesco --output-document=multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=shaun --output-document=multisig.json
+  warscli tx broadcast multisig.json
   rm multisig.json
 }
 
-edit_bond_multisig_incorrect_signers_1() {
-  bondscli tx bonds edit-bond \
+edit_war_multisig_incorrect_signers_1() {
+  warscli tx wars edit-war \
     --token=abc \
     --name="(1) New A B C" \
     --description="(1) New description about A B C" \
-    --signers="$(bondscli keys show shaun --keyring-backend=test -a),$(bondscli keys show francesco --keyring-backend=test -a)" \
+    --signers="$(warscli keys show shaun --keyring-backend=test -a),$(warscli keys show francesco --keyring-backend=test -a)" \
     --from="$MIGUEL" -y --broadcast-mode block --generate-only >multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=shaun --output-document=multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=francesco --output-document=multisig.json
-  bondscli tx broadcast multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=shaun --output-document=multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=francesco --output-document=multisig.json
+  warscli tx broadcast multisig.json
   rm multisig.json
 }
 
-edit_bond_multisig_incorrect_signers_2() {
-  bondscli tx bonds edit-bond \
+edit_war_multisig_incorrect_signers_2() {
+  warscli tx wars edit-war \
     --token=abc \
     --name="(2) New A B C" \
     --description="(2) New description about A B C" \
     --signers="$FRANCESCO" \
     --from="$MIGUEL" -y --broadcast-mode block --generate-only >multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=francesco --output-document=multisig.json
-  bondscli tx broadcast multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=francesco --output-document=multisig.json
+  warscli tx broadcast multisig.json
   rm multisig.json
 }
 
-edit_bond_multisig_correct_signers() {
-  bondscli tx bonds edit-bond \
+edit_war_multisig_correct_signers() {
+  warscli tx wars edit-war \
     --token=abc \
     --name="(3) New A B C" \
     --description="(3) New description about A B C" \
-    --signers="$(bondscli keys show francesco --keyring-backend=test -a),$(bondscli keys show shaun --keyring-backend=test -a)" \
+    --signers="$(warscli keys show francesco --keyring-backend=test -a),$(warscli keys show shaun --keyring-backend=test -a)" \
     --from="$MIGUEL" -y --broadcast-mode block --generate-only >multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=francesco --output-document=multisig.json
-  yes $PASSWORD | bondscli tx sign multisig.json --from=shaun --output-document=multisig.json
-  bondscli tx broadcast multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=francesco --output-document=multisig.json
+  yes $PASSWORD | warscli tx sign multisig.json --from=shaun --output-document=multisig.json
+  warscli tx broadcast multisig.json
   rm multisig.json
 }
 
-RET=$(bondscli status 2>&1)
+RET=$(warscli status 2>&1)
 if [[ ($RET == ERROR*) || ($RET == *'"latest_block_height": "0"'*) ]]; then
   wait
 fi
 
 PASSWORD="12345678"
 GAS_PRICES="0.025stake"
-MIGUEL=$(yes $PASSWORD | bondscli keys show miguel --keyring-backend=test -a)
-FRANCESCO=$(yes $PASSWORD | bondscli keys show francesco --keyring-backend=test -a)
-SHAUN=$(yes $PASSWORD | bondscli keys show shaun --keyring-backend=test -a)
-FEE=$(yes $PASSWORD | bondscli keys show fee --keyring-backend=test -a)
+MIGUEL=$(yes $PASSWORD | warscli keys show miguel --keyring-backend=test -a)
+FRANCESCO=$(yes $PASSWORD | warscli keys show francesco --keyring-backend=test -a)
+SHAUN=$(yes $PASSWORD | warscli keys show shaun --keyring-backend=test -a)
+FEE=$(yes $PASSWORD | warscli keys show fee --keyring-backend=test -a)
 
-echo "Creating bond..."
-create_bond_multisig
+echo "Creating war..."
+create_war_multisig
 echo "Waiting a bit..."
 sleep 5
-echo "Created bond..."
-bondscli q bonds bond abc
+echo "Created war..."
+warscli q wars war abc
 
-echo "Editing bond with incorrect signers..."
-edit_bond_multisig_incorrect_signers_1
+echo "Editing war with incorrect signers..."
+edit_war_multisig_incorrect_signers_1
 echo "Waiting a bit..."
 sleep 5
-bondscli q bonds bond abc
-echo "Bond was NOT edited!"
+warscli q wars war abc
+echo "War was NOT edited!"
 
-echo "Editing bond with incorrect signers again..."
-edit_bond_multisig_incorrect_signers_2
+echo "Editing war with incorrect signers again..."
+edit_war_multisig_incorrect_signers_2
 echo "Waiting a bit..."
 sleep 5
-bondscli q bonds bond abc
-echo "Bond was NOT edited!"
+warscli q wars war abc
+echo "War was NOT edited!"
 
-echo "Editing bond with correct..."
-edit_bond_multisig_correct_signers
+echo "Editing war with correct..."
+edit_war_multisig_correct_signers
 echo "Waiting a bit..."
 sleep 5
-bondscli q bonds bond abc
-echo "Bond was edited!"
+warscli q wars war abc
+echo "War was edited!"

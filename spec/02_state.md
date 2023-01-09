@@ -1,10 +1,10 @@
 # State
 
-## Bonds
+## Wars
 
-The instance of a bond is stored with its bond-specific parameters. This record is accessed by the identity of a token that represents the bond.
+The instance of a war is stored with its war-specific parameters. This record is accessed by the identity of a token that represents the war.
 
-* Bonds: `0x00 | tokenHash -> amino(Bond)`
+* Wars: `0x00 | tokenHash -> amino(War)`
 
 ## Batches
 
@@ -12,7 +12,7 @@ As a protection against front-runnning orders, a batching mechanism creates a ca
 
 ### Querying Batches
 
-Batches are accessed by the identity token of the bond.
+Batches are accessed by the identity token of the war.
 
 * Current Batches: `0x01 | tokenHash -> amino(Batch)`
 * Last Batches: `0x02 | tokenHash -> amino(Batch)`

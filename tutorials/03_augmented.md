@@ -2,23 +2,23 @@
 description: Tutorial
 ---
 
-# Augmented Bonding Curve
+# Augmented Waring Curve
 
-Throughout this tutorial, some knowledge around [Augmented Bonding Curves](https://medium.com/giveth/deep-dive-augmented-bonding-curves-3f1f7c1fa751) will be assumed.
+Throughout this tutorial, some knowledge around [Augmented Waring Curves](https://medium.com/giveth/deep-dive-augmented-waring-curves-3f1f7c1fa751) will be assumed.
 
 ## Contents
 
-* [Bond Configuration](03_augmented.md#bond-configuration)
-* [Bond Creation](03_augmented.md#bond-creation)
+* [War Configuration](03_augmented.md#war-configuration)
+* [War Creation](03_augmented.md#war-creation)
 * [Mint to Deposit \(Hatch Phase\)](03_augmented.md#mint-to-deposit-hatch-phase)
 * [Mint to Deposit and Burn to Withdraw \(Open Phase\)](03_augmented.md#mint-to-deposit-and-burn-to-withdraw-open-phase)
 * [Outcome Payment, Settlement, Share Withdrawal](03_augmented.md#outcome-payment-settlement-share-withdrawal)
 
-## Bond Configuration
+## War Configuration
 
 ### Curve Function
 
-In this tutorial, an augmented function bond will be created. The augmented function implemented by the Bonds module can be represented by the below formulas [\[ref\]](https://medium.com/giveth/deep-dive-augmented-bonding-curves-3f1f7c1fa751):
+In this tutorial, an augmented function war will be created. The augmented function implemented by the Wars module can be represented by the below formulas [\[ref\]](https://medium.com/giveth/deep-dive-augmented-waring-curves-3f1f7c1fa751):
 
 * Initial reserve:
 
@@ -55,7 +55,7 @@ In this tutorial, the values picked will be: `d0=500.0`, `p0=0.01`, `theta=0.4`,
 
 ![augmented graph](../.gitbook/assets/augmented7.png)
 
-Generated using: [https://github.com/BlockScience/cadCAD-Tutorials/tree/master/00-Reference-Mechanisms/01-augmented-bonding-curve](https://github.com/BlockScience/cadCAD-Tutorials/tree/master/00-Reference-Mechanisms/01-augmented-bonding-curve)
+Generated using: [https://github.com/BlockScience/cadCAD-Tutorials/tree/master/00-Reference-Mechanisms/01-augmented-waring-curve](https://github.com/BlockScience/cadCAD-Tutorials/tree/master/00-Reference-Mechanisms/01-augmented-waring-curve)
 
 ### Fees
 
@@ -63,28 +63,28 @@ In this tutorial, the transaction fee percentage will be set to `0%`, the main r
 
 ### Outcome Payment
 
-The outcome payment is an optional \(non-enforceable\) promise that the bond creator makes to investors specified in terms of a token amount. This is the amount that will need to be deposited into the bond to transition it from the `OPEN` state to the `SETTLE` state, once the goals of the bond have been reached as a result of the reserve token funding that the bond received.
+The outcome payment is an optional \(non-enforceable\) promise that the war creator makes to investors specified in terms of a token amount. This is the amount that will need to be deposited into the war to transition it from the `OPEN` state to the `SETTLE` state, once the goals of the war have been reached as a result of the reserve token funding that the war received.
 
-This new reserve will be immediately available to all bond token holders, and the amount available to each holder depends on the amount of bond tokens that they hold. In the case of this tutorial, this will be set to `100000stake`.
+This new reserve will be immediately available to all war token holders, and the amount available to each holder depends on the amount of war tokens that they hold. In the case of this tutorial, this will be set to `100000stake`.
 
 ### Other Customisation
 
-Other customisation options that this tutorial will not go into is the ability to disable sells \(burns\), and the ability to have multiple signers as the creators/editors of the bond. In this tutorial, sells will be enabled, and the signer will be set to the address underlying the `shaun` account \(created when running `make run_with_data`\).
+Other customisation options that this tutorial will not go into is the ability to disable sells \(burns\), and the ability to have multiple signers as the creators/editors of the war. In this tutorial, sells will be enabled, and the signer will be set to the address underlying the `shaun` account \(created when running `make run_with_data`\).
 
 Additionally, sanity rate and sanity margin percentage only apply to swapper functions and so they will not be discussed. In this tutorial, these were thus just set to `0`.
 
-## Bond Creation
+## War Creation
 
-The bond, with the above configurations, can be created as follows:
+The war, with the above configurations, can be created as follows:
 
 ```bash
-SHAUNADDR="$(bondscli keys show shaun -a)"
-FEEADDR="$(bondscli keys show fee -a)"
+SHAUNADDR="$(warscli keys show shaun -a)"
+FEEADDR="$(warscli keys show fee -a)"
 
-bondscli tx bonds create-bond \
+warscli tx wars create-war \
   --token=demo \
-  --name="My Bond" \
-  --description="Description about my bond" \
+  --name="My War" \
+  --description="Description about my war" \
   --function-type=augmented_function \
   --function-parameters="d0:500.0,p0:0.01,theta:0.4,kappa:3.0" \
   --reserve-tokens=stake \
@@ -106,15 +106,15 @@ bondscli tx bonds create-bond \
   -y
 ```
 
-The created bond can be queried using `bondscli q bonds bond demo`, which should return the following, but with different addresses:
+The created war can be queried using `warscli q wars war demo`, which should return the following, but with different addresses:
 
 ```bash
 {
-  "type": "bonds/Bond",
+  "type": "wars/War",
   "value": {
     "token": "demo",
-    "name": "My Bond",
-    "description": "Description about my bond",
+    "name": "My War",
+    "description": "Description about my war",
     "creator": "cosmos1ew5xdhcpamfex0qqu0h8usmek4e3nnc8sm27jc",
     "function_type": "augmented_function",
     "function_parameters": [
@@ -188,7 +188,7 @@ Note that some extra fields that we did not input ourselves are present. Some of
 
 ## Mint to Deposit \(Hatch Phase\)
 
-During the hatch phase, one can only perform a buy \(mint-to-deposit\). The buying price will be `p0`, and we can query this for confirmation using `bondscli q bonds current-price demo`, which gives:
+During the hatch phase, one can only perform a buy \(mint-to-deposit\). The buying price will be `p0`, and we can query this for confirmation using `warscli q wars current-price demo`, which gives:
 
 ```bash
 [
@@ -199,7 +199,7 @@ During the hatch phase, one can only perform a buy \(mint-to-deposit\). The buyi
 ]
 ```
 
-Given that the initial supply `S0` is `50000`, it will require `50000demo` in order for the augmented curve to transition to the `OPEN` phase. We can go ahead and just perform a buy of `50000demo` in a single buy. The expected price will be `0.01 x 50000 = 500stake`. We can confirm this using `bondscli q bonds buy-price 50000demo`, which gives:
+Given that the initial supply `S0` is `50000`, it will require `50000demo` in order for the augmented curve to transition to the `OPEN` phase. We can go ahead and just perform a buy of `50000demo` in a single buy. The expected price will be `0.01 x 50000 = 500stake`. We can confirm this using `warscli q wars buy-price 50000demo`, which gives:
 
 ```bash
 ...
@@ -217,7 +217,7 @@ Note that this matches the initial raise `d0`. Also note that since we are not c
 We can perform the buy as follows, with `500stake` as the max spend. The account used is the `miguel` account \(created when running `make run_with_data`\).
 
 ```bash
-bondscli tx bonds buy 50000demo 500stake \
+warscli tx wars buy 50000demo 500stake \
   --from miguel \
   --keyring-backend=test \
   --broadcast-mode block \
@@ -225,7 +225,7 @@ bondscli tx bonds buy 50000demo 500stake \
   -y
 ```
 
-We can query the `miguel` account to confirm that the demo tokens have reached the account by using `bondscli q account $(bondscli keys show miguel -a)`. A maximum of 2 blocks-worth of time might need to pass for the order in the batch to get processed.
+We can query the `miguel` account to confirm that the demo tokens have reached the account by using `warscli q account $(warscli keys show miguel -a)`. A maximum of 2 blocks-worth of time might need to pass for the order in the batch to get processed.
 
 ```bash
 ...
@@ -245,7 +245,7 @@ We can query the `miguel` account to confirm that the demo tokens have reached t
 
 Note how the account now has `50000demo` and `99994500stake` \(a `5500stake` decrease!\). The decrease in stake includes the buying price charged `500stake` and the blockchain gas fees `5000stake`.
 
-We can also confirm the supply and reserve values and that the bond has transitioned to the `OPEN` phase by querying the bond using `bondscli q bonds bond demo` which gives the below result. Note how the current reserve matches `R0=300`.
+We can also confirm the supply and reserve values and that the war has transitioned to the `OPEN` phase by querying the war using `warscli q wars war demo` which gives the below result. Note how the current reserve matches `R0=300`.
 
 ```bash
 ...
@@ -264,11 +264,11 @@ We can also confirm the supply and reserve values and that the bond has transiti
 ...
 ```
 
-The remaining `200` out of the `500stake` deposited were sent to the funding pool \(i.e. fee address\) and can be queried using `bondscli q account "$FEEADDR"`. Note that the bond creator is expected to have access to this funding pool and will be able to safely use any funds send to it.
+The remaining `200` out of the `500stake` deposited were sent to the funding pool \(i.e. fee address\) and can be queried using `warscli q account "$FEEADDR"`. Note that the war creator is expected to have access to this funding pool and will be able to safely use any funds send to it.
 
 ## Mint to Deposit and Burn to Withdraw \(Open Phase\)
 
-Now that the `OPEN` phase has been reached, we can query the price again using `bondscli q bonds current-price demo`, which gives:
+Now that the `OPEN` phase has been reached, we can query the price again using `warscli q wars current-price demo`, which gives:
 
 ```bash
 [
@@ -287,11 +287,11 @@ Given that mint-to-deposit and burn-to-withdraw during the `OPEN` phase have bee
 
 ## Outcome Payment, Settlement, Share Withdrawal
 
-As a refresher, the outcome payment is an amount of tokens that the bond creator had indicated would be paid to the bond once certain goals were reached. In the case of this tutorial, this is `100000stake`.
+As a refresher, the outcome payment is an amount of tokens that the war creator had indicated would be paid to the war once certain goals were reached. In the case of this tutorial, this is `100000stake`.
 
-Let's assume that those goals were reached and the bond creator wants to make the outcome payment. Note that anyone with enough tokens is able to make the outcome payment, not just the bond creator.
+Let's assume that those goals were reached and the war creator wants to make the outcome payment. Note that anyone with enough tokens is able to make the outcome payment, not just the war creator.
 
-Before making the payment, it is interesting to query the returns from selling before the outcome payment reaches the reserves, using `bondscli q bonds sell-return 50000demo`, which gives:
+Before making the payment, it is interesting to query the returns from selling before the outcome payment reaches the reserves, using `warscli q wars sell-return 50000demo`, which gives:
 
 ```bash
 ...
@@ -312,10 +312,10 @@ Before making the payment, it is interesting to query the returns from selling b
 
 Note that the maximum that the user can get back at the moment is the exact amount that was initially invested, `300stake`, minus an exit fee of `1stake`.
 
-Now let's make the outcome payment from the bond creator. The account used is the `shaun` account \(created when running `make run_with_data`\).
+Now let's make the outcome payment from the war creator. The account used is the `shaun` account \(created when running `make run_with_data`\).
 
 ```bash
-bondscli tx bonds make-outcome-payment demo \
+warscli tx wars make-outcome-payment demo \
   --from shaun \
   --keyring-backend=test \
   --broadcast-mode block \
@@ -323,7 +323,7 @@ bondscli tx bonds make-outcome-payment demo \
   -y
 ```
 
-This causes a state transition from `OPEN` to `SETTLE` and adds `100000stake` to the reserve. Both of these can be confirmed by querying the bond using `bondscli q bonds bond demo`, which gives:
+This causes a state transition from `OPEN` to `SETTLE` and adds `100000stake` to the reserve. Both of these can be confirmed by querying the war using `warscli q wars war demo`, which gives:
 
 ```bash
 ...
@@ -338,10 +338,10 @@ This causes a state transition from `OPEN` to `SETTLE` and adds `100000stake` to
 ...
 ```
 
-At this stage, both buys and sells have been disabled and the only action that is possible is for bond token holders to withdraw their share of the reserve pool by performing a share withdrawal. The account used is the `miguel` account \(created when running `make run_with_data`\).
+At this stage, both buys and sells have been disabled and the only action that is possible is for war token holders to withdraw their share of the reserve pool by performing a share withdrawal. The account used is the `miguel` account \(created when running `make run_with_data`\).
 
 ```text
-bondscli tx bonds withdraw-share demo \
+warscli tx wars withdraw-share demo \
   --from miguel \
   --keyring-backend=test \
   --broadcast-mode block \
@@ -349,7 +349,7 @@ bondscli tx bonds withdraw-share demo \
   -y
 ```
 
-Since the `miguel` account held 100% of the bond token supply, this share withdrawal sends all of the bond reserve to `miguel` and burns the entire bond token supply \(sent by `miguel`, which held all of these\). In fact if we query the bond one last time, this information can be confirmed, using `bondscli q bonds bond demo`, which gives:
+Since the `miguel` account held 100% of the war token supply, this share withdrawal sends all of the war reserve to `miguel` and burns the entire war token supply \(sent by `miguel`, which held all of these\). In fact if we query the war one last time, this information can be confirmed, using `warscli q wars war demo`, which gives:
 
 ```bash
 ...

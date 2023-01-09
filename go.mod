@@ -1,4 +1,4 @@
-module github.com/ixoworld/bonds
+module github.com/warmage-sports/war
 
 go 1.13
 

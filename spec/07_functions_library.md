@@ -1,10 +1,10 @@
 # Functions Library
 
-The Bonds Module is deployed with a built-in set of libraries for commonly-used algorithmic pricing and reserve functions. It also includes algorithmic application logic and features, such as _Augmented Bonding_. Additional functions can be added to the Library through SDK updates. This requires a formal process of governance to approve updates, to assure the integrity of these functions.
+The Wars Module is deployed with a built-in set of libraries for commonly-used algorithmic pricing and reserve functions. It also includes algorithmic application logic and features, such as _Augmented Waring_. Additional functions can be added to the Library through SDK updates. This requires a formal process of governance to approve updates, to assure the integrity of these functions.
 
 ## Function Types
 
-The following function types will be included in the standard Bonds SDK Module:
+The following function types will be included in the standard Wars SDK Module:
 
 * Power \(exponential\)
 * Logistic \(sigmoidal\)
@@ -12,9 +12,9 @@ The following function types will be included in the standard Bonds SDK Module:
 
   Algorithmic Applications include:
 
-* Alpha Bonds \(Risk-adjusted bonding\)
-* Innovation Bonds \(offers bond shareholders contingent rights to future IP rights and/or revenues\)
-* Impact Bonds \(offers bond shareholders contingent rights to success-based outcomes payments and/or rewards\)
+* Alpha Wars \(Risk-adjusted waring\)
+* Innovation Wars \(offers war shareholders contingent rights to future IP rights and/or revenues\)
+* Impact Wars \(offers war shareholders contingent rights to success-based outcomes payments and/or rewards\)
 
 ### Exponential Function \(power\)
 
@@ -36,7 +36,7 @@ Integral \(used as reserve function\):
 
 ![sigmoid function reserve](../.gitbook/assets/sigmoid2.png)
 
-### Augmented Bonding Curves \(augmented\)
+### Augmented Waring Curves \(augmented\)
 
 Initial reserve:
 
@@ -62,7 +62,7 @@ Reserve function:
 
 ![reserve function](../.gitbook/assets/augmented6%20%281%29.png)
 
-Ref: [https://medium.com/giveth/deep-dive-augmented-bonding-curves-3f1f7c1fa751](https://medium.com/giveth/deep-dive-augmented-bonding-curves-3f1f7c1fa751)
+Ref: [https://medium.com/giveth/deep-dive-augmented-waring-curves-3f1f7c1fa751](https://medium.com/giveth/deep-dive-augmented-waring-curves-3f1f7c1fa751)
 
 ### Constant Product Function \(swapper\)
 

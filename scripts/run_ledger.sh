@@ -3,27 +3,27 @@
 PASSWORD="12345678"
 GAS_PRICES="0.025stake"
 
-bondsd init local --chain-id bondschain-1
+wars init local --chain-id warschain-1
 
-bondscli keys add miguel --ledger
-yes $PASSWORD | bondscli keys add francesco
-yes $PASSWORD | bondscli keys add shaun
-yes $PASSWORD | bondscli keys add reserve
-yes $PASSWORD | bondscli keys add fee
+warscli keys add miguel --ledger
+yes $PASSWORD | warscli keys add francesco
+yes $PASSWORD | warscli keys add shaun
+yes $PASSWORD | warscli keys add reserve
+yes $PASSWORD | warscli keys add fee
 
-bondsd add-genesis-account "$(bondscli keys show miguel -a)" 100000000stake,1000000res,1000000rez
-bondsd add-genesis-account "$(bondscli keys show francesco -a)" 100000000stake,1000000res,1000000rez
-bondsd add-genesis-account "$(bondscli keys show shaun -a)" 100000000stake,1000000res,1000000rez
+wars add-genesis-account "$(warscli keys show miguel -a)" 100000000stake,1000000res,1000000rez
+wars add-genesis-account "$(warscli keys show francesco -a)" 100000000stake,1000000res,1000000rez
+wars add-genesis-account "$(warscli keys show shaun -a)" 100000000stake,1000000res,1000000rez
 
-bondscli config chain-id bondschain-1
-bondscli config output json
-bondscli config indent true
-bondscli config trust-node true
+warscli config chain-id warschain-1
+warscli config output json
+warscli config indent true
+warscli config trust-node true
 
-echo "$PASSWORD" | bondsd gentx --name miguel
+echo "$PASSWORD" | wars gentx --name miguel
 
-bondsd collect-gentxs
-bondsd validate-genesis
+wars collect-gentxs
+wars validate-genesis
 
-bondsd start --pruning "everything" &
-bondscli rest-server --chain-id bondschain-1 --trust-node && fg
+wars start --pruning "everything" &
+warscli rest-server --chain-id warschain-1 --trust-node && fg

@@ -3,7 +3,7 @@
 wait() {
   echo "Waiting for chain to start..."
   while :; do
-    RET=$(bondscli status 2>&1)
+    RET=$(warscli status 2>&1)
     if [[ ($RET == ERROR*) || ($RET == *'"latest_block_height": "0"'*) ]]; then
       sleep 1
     else
@@ -17,32 +17,32 @@ wait() {
 tx_from_m() {
   cmd=$1
   shift
-  yes $PASSWORD | bondscli tx bonds "$cmd" --from miguel --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
+  yes $PASSWORD | warscli tx wars "$cmd" --from miguel --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
 }
 
 tx_from_f() {
   cmd=$1
   shift
-  yes $PASSWORD | bondscli tx bonds "$cmd" --from francesco --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
+  yes $PASSWORD | warscli tx wars "$cmd" --from francesco --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
 }
 
 tx_from_s() {
   cmd=$1
   shift
-  yes $PASSWORD | bondscli tx bonds "$cmd" --from shaun --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
+  yes $PASSWORD | warscli tx wars "$cmd" --from shaun --keyring-backend=test -y --broadcast-mode block --gas-prices="$GAS_PRICES" "$@"
 }
 
-RET=$(bondscli status 2>&1)
+RET=$(warscli status 2>&1)
 if [[ ($RET == ERROR*) || ($RET == *'"latest_block_height": "0"'*) ]]; then
   wait
 fi
 
 PASSWORD="12345678"
 GAS_PRICES="0.025stake"
-MIGUEL=$(yes $PASSWORD | bondscli keys show miguel --keyring-backend=test -a)
-FRANCESCO=$(yes $PASSWORD | bondscli keys show francesco --keyring-backend=test -a)
-SHAUN=$(yes $PASSWORD | bondscli keys show shaun --keyring-backend=test -a)
-FEE=$(yes $PASSWORD | bondscli keys show fee --keyring-backend=test -a)
+MIGUEL=$(yes $PASSWORD | warscli keys show miguel --keyring-backend=test -a)
+FRANCESCO=$(yes $PASSWORD | warscli keys show francesco --keyring-backend=test -a)
+SHAUN=$(yes $PASSWORD | warscli keys show shaun --keyring-backend=test -a)
+FEE=$(yes $PASSWORD | warscli keys show fee --keyring-backend=test -a)
 
 # d0 := 500.0   // initial raise (reserve)
 # p0 := 0.01    // initial price (reserve per token)
@@ -53,8 +53,8 @@ FEE=$(yes $PASSWORD | bondscli keys show fee --keyring-backend=test -a)
 # S0 = 50000            // initial supply
 # V0 = 416666666666.667 // invariant
 
-echo "Creating bond..."
-tx_from_m create-bond \
+echo "Creating war..."
+tx_from_m create-war \
   --token=abc \
   --name="A B C" \
   --description="Description about A B C" \
@@ -72,18 +72,18 @@ tx_from_m create-bond \
   --signers="$MIGUEL" \
   --batch-blocks=1 \
   --outcome-payment="100000res"
-echo "Created bond..."
-bondscli q bonds bond abc
+echo "Created war..."
+warscli q wars war abc
 
 echo "Miguel buys 20000abc..."
 tx_from_m buy 20000abc 100000res
 echo "Miguel's account..."
-bondscli q auth account "$MIGUEL"
+warscli q auth account "$MIGUEL"
 
 echo "Francesco buys 20000abc..."
 tx_from_f buy 20000abc 100000res
 echo "Francesco's account..."
-bondscli q auth account "$FRANCESCO"
+warscli q auth account "$FRANCESCO"
 
 echo "Shaun cannot buy 10001abc..."
 tx_from_s buy 10001abc 100000res
@@ -92,27 +92,27 @@ tx_from_s sell 10000abc
 echo "Shaun can buy 10000abc..."
 tx_from_s buy 10000abc 100000res
 echo "Shaun's account..."
-bondscli q auth account "$SHAUN"
+warscli q auth account "$SHAUN"
 
-echo "Bond state is now open..."  # since 50000 (S0) reached
-bondscli q bonds bond abc
+echo "War state is now open..."  # since 50000 (S0) reached
+warscli q wars war abc
 
 echo "Miguel sells 20000abc..."
 tx_from_m sell 20000abc
 echo "Miguel's account..."
-bondscli q auth account "$MIGUEL"
+warscli q auth account "$MIGUEL"
 
 echo "Francesco makes outcome payment..."
 tx_from_f make-outcome-payment abc
 echo "Francesco's account..."
-bondscli q auth account "$FRANCESCO"
+warscli q auth account "$FRANCESCO"
 
 echo "Francesco withdraws share..."
 tx_from_f withdraw-share abc
 echo "Francesco's account..."
-bondscli q auth account "$FRANCESCO"
+warscli q auth account "$FRANCESCO"
 
 echo "Shaun withdraws share..."
 tx_from_s withdraw-share abc
 echo "Shaun's account..."
-bondscli q auth account "$SHAUN"
+warscli q auth account "$SHAUN"

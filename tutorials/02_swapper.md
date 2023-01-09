@@ -6,22 +6,22 @@ description: Tutorial
 
 ## Contents
 
-* [Bond Configuration](02_swapper.md#bond-configuration)
-* [Bond Creation](02_swapper.md#bond-creation)
+* [War Configuration](02_swapper.md#war-configuration)
+* [War Creation](02_swapper.md#war-creation)
 * [Supply Liquidity](02_swapper.md#supply-liquidity)
 * [Make a Swap](02_swapper.md#make-a-swap)
 
-## Bond Configuration
+## War Configuration
 
 Configuration steps that were covered in previous tutorials will not be described in this tutorial, unless they take on new meaning.
 
 ### Curve Function
 
-In this tutorial, a swapper function bond will be created. The swapper function implemented by the Bonds module is shown below, where `x` and `y` represent the balances of two distinct reserves \(i.e. two reserve tokens\). The constant `k` is not user-decided but is simply the product of the two balances, which is expected to remain the same for any number of swaps and only increases/decreases when liquidity increases/decreases \(i.e. a buy or sell, respectively\).
+In this tutorial, a swapper function war will be created. The swapper function implemented by the Wars module is shown below, where `x` and `y` represent the balances of two distinct reserves \(i.e. two reserve tokens\). The constant `k` is not user-decided but is simply the product of the two balances, which is expected to remain the same for any number of swaps and only increases/decreases when liquidity increases/decreases \(i.e. a buy or sell, respectively\).
 
 ![swapper function](../.gitbook/assets/swapper.png)
 
-This function allows us to calculate the price of buying a number of bond tokens or the returns when selling bond tokens, as well as the returns for swapping a number of `x` tokens to `y` tokens and vice-versa:
+This function allows us to calculate the price of buying a number of war tokens or the returns when selling war tokens, as well as the returns for swapping a number of `x` tokens to `y` tokens and vice-versa:
 
 * Buying and selling is considered adding/removing liquidity to/from the swap AMM, and thus buying requires depositing both `x` and `y` tokens, and similarly returns when selling are of both `x` and `y` tokens. Internal calculations that determine prices/returns will not be discussed in this tutorial.
 * Swap amounts are determined by using the above function directly. If someone increases the value of `x` \(by depositing `x` tokens\), the value of `y` has to change such that the product remains `k`. This change \(decrease\) in `y` is precisely what the user gets in return. The same applies the other way round.
@@ -30,7 +30,7 @@ Note that in the case of the swapper function, we do not have any extra constant
 
 ### Reserve Token/s
 
-The reserve tokens are the tokens that accounts will send to the bond in order to mint bond tokens. A swapper function has a pair of reserve tokens, which are in fact the tokens that can be swapped for each other. In this tutorial, we will use `res` and `rez`.
+The reserve tokens are the tokens that accounts will send to the war in order to mint war tokens. A swapper function has a pair of reserve tokens, which are in fact the tokens that can be swapped for each other. In this tutorial, we will use `res` and `rez`.
 
 Note that in the case of the swapper function, the amount of reserve required to add liquidity to the AMM \(i.e. buy a certain number of `demo` tokens\) will depend on the ratio of the current reserves. If the `x` balance is greater, than more `x` tokens will be required, and vice-versa.
 
@@ -52,20 +52,20 @@ In this tutorial, we will go with a `0.5` sanity rate and `20%` sanity margin pe
 
 ### Other Customisation
 
-Other customisation options that this tutorial will not go into is the ability to disable sells \(burns\), the ability to have multiple signers as the creators/editors of the bond, and the ability to add an outcome payment. In this tutorial, sells will be enabled, the signer will be set to the address underlying the `shaun` account \(created when running `make run_with_data`\), and there will be no outcome payment \(discussed in the augmented function tutorial\).
+Other customisation options that this tutorial will not go into is the ability to disable sells \(burns\), the ability to have multiple signers as the creators/editors of the war, and the ability to add an outcome payment. In this tutorial, sells will be enabled, the signer will be set to the address underlying the `shaun` account \(created when running `make run_with_data`\), and there will be no outcome payment \(discussed in the augmented function tutorial\).
 
-## Bond Creation
+## War Creation
 
-The bond, with the above configurations, can be created as follows. Note that sanity rate and sanity margin percentage only apply to swapper functions and were thus just set to `0`.
+The war, with the above configurations, can be created as follows. Note that sanity rate and sanity margin percentage only apply to swapper functions and were thus just set to `0`.
 
 ```bash
-SHAUNADDR="$(bondscli keys show shaun -a)"
-FEEADDR="$(bondscli keys show fee -a)"
+SHAUNADDR="$(warscli keys show shaun -a)"
+FEEADDR="$(warscli keys show fee -a)"
 
-bondscli tx bonds create-bond \
+warscli tx wars create-war \
   --token=demo \
-  --name="My Bond" \
-  --description="Description about my bond" \
+  --name="My War" \
+  --description="Description about my war" \
   --function-type=swapper_function \
   --function-parameters="" \
   --reserve-tokens=res,rez \
@@ -87,15 +87,15 @@ bondscli tx bonds create-bond \
   -y
 ```
 
-The created bond can be queried using `bondscli q bonds bond demo`, which should return the following, but with different addresses:
+The created war can be queried using `warscli q wars war demo`, which should return the following, but with different addresses:
 
 ```bash
 {
-  "type": "bonds/Bond",
+  "type": "wars/War",
   "value": {
     "token": "demo",
-    "name": "My Bond",
-    "description": "Description about my bond",
+    "name": "My War",
+    "description": "Description about my war",
     "creator": "cosmos1km5cj5yq5c4757ksmpe88sx4snyfgd6wx8nfzx",
     "function_type": "swapper_function",
     "function_parameters": null,
@@ -146,16 +146,16 @@ Note that some extra fields that we did not input ourselves are present. These w
 
 ## Supply Liquidity
 
-Liquidity can be added to the AMM by performing buys \(mint-to-deposit\), which mints bond tokens. Similarly, liquidity would be removed by performing sells \(burn-to-withdraw\) which burns bond tokens. Once liquidity \(i.e. reserve tokens\) is added by liquidity providers, swaps can take place using the reserve that is in place. If a liquidity provider burns-to-withdraw, they get a proportional share of each of the two reserve pools \(`x` and `y`\) in exchange for bond tokens.
+Liquidity can be added to the AMM by performing buys \(mint-to-deposit\), which mints war tokens. Similarly, liquidity would be removed by performing sells \(burn-to-withdraw\) which burns war tokens. Once liquidity \(i.e. reserve tokens\) is added by liquidity providers, swaps can take place using the reserve that is in place. If a liquidity provider burns-to-withdraw, they get a proportional share of each of the two reserve pools \(`x` and `y`\) in exchange for war tokens.
 
-In general, when adding liquidity to a swapper function, the current exchange rate \(based on the `x` and `y` balances\) is used to determine how much of each reserve token makes up the price. The first buy is special and plays a very important role in specifying the price of the bond token. Since we have no price reference for the first buy in a swapper function, the `MaxPrices` specified are used as the actual price, with no extra fees charged.
+In general, when adding liquidity to a swapper function, the current exchange rate \(based on the `x` and `y` balances\) is used to determine how much of each reserve token makes up the price. The first buy is special and plays a very important role in specifying the price of the war token. Since we have no price reference for the first buy in a swapper function, the `MaxPrices` specified are used as the actual price, with no extra fees charged.
 
-This effectively means that if the user requested `n` bond tokens with max prices `x1` and `y2` \(for reserve tokens `x` and `y`\), the next buyers will have to pay `(x1/n)` and `(y1/n)` tokens per bond token requested. Specifying high `x1` and `y1` prices for a small `n` \(say `n=1`\) means that the next buyers will have to pay at most `x1` and `y1` per bond token. **In summary, it is important that the first buy is well-calculated and performed carefully.**
+This effectively means that if the user requested `n` war tokens with max prices `x1` and `y2` \(for reserve tokens `x` and `y`\), the next buyers will have to pay `(x1/n)` and `(y1/n)` tokens per war token requested. Specifying high `x1` and `y1` prices for a small `n` \(say `n=1`\) means that the next buyers will have to pay at most `x1` and `y1` per war token. **In summary, it is important that the first buy is well-calculated and performed carefully.**
 
 In this tutorial, we will perform a buy of `1demo` with max prices `500res` and `1000rez`.
 
 ```bash
-bondscli tx bonds buy 1demo 500res,1000rez \
+warscli tx wars buy 1demo 500res,1000rez \
   --from miguel \
   --keyring-backend=test \
   --broadcast-mode block \
@@ -163,7 +163,7 @@ bondscli tx bonds buy 1demo 500res,1000rez \
   -y
 ```
 
-We can query the `miguel` account to confirm that the `1demo` has reached the account by using `bondscli q account $(bondscli keys show miguel -a)`, where we can also see that exactly `500res` and `1000rez` were taken out of the account.
+We can query the `miguel` account to confirm that the `1demo` has reached the account by using `warscli q account $(warscli keys show miguel -a)`, where we can also see that exactly `500res` and `1000rez` were taken out of the account.
 
 ```bash
 ...
@@ -183,7 +183,7 @@ We can query the `miguel` account to confirm that the `1demo` has reached the ac
 ...
 ```
 
-At this point, if we query the buy price for an additional `1demo` using `bondscli q bonds buy-price 1demo`, as expected, this shows a `500res` and `1000rez` price, excluding fees:
+At this point, if we query the buy price for an additional `1demo` using `warscli q wars buy-price 1demo`, as expected, this shows a `500res` and `1000rez` price, excluding fees:
 
 ```text
 ...
@@ -202,7 +202,7 @@ At this point, if we query the buy price for an additional `1demo` using `bondsc
 
 ## Make a Swap
 
-Before performing a swap, we can query the current returns for swapping the tokens. Say we want to swap `10res` to `rez`, we can perform the query `bondscli q bonds swap-return demo 10res rez`, which gives:
+Before performing a swap, we can query the current returns for swapping the tokens. Say we want to swap `10res` to `rez`, we can perform the query `warscli q wars swap-return demo 10res rez`, which gives:
 
 ```bash
 {
@@ -226,7 +226,7 @@ Since the current reserve balances are `500res` and `1000rez`, then the value of
 We can perform a swap of `10res` as shown below. The account used is the `miguel` account \(created when running `make run_with_data`\).
 
 ```bash
-bondscli tx bonds swap demo 10 res rez \
+warscli tx wars swap demo 10 res rez \
   --from miguel \
   --keyring-backend=test \
   --broadcast-mode block \
@@ -234,7 +234,7 @@ bondscli tx bonds swap demo 10 res rez \
   -y
 ```
 
-We can query the `miguel` account to confirm that the demo tokens are no longer in the account by using `bondscli q account $(bondscli keys show miguel -a)`. A maximum of 2 blocks-worth of time might need to pass for the order in the batch to get processed.
+We can query the `miguel` account to confirm that the demo tokens are no longer in the account by using `warscli q account $(warscli keys show miguel -a)`. A maximum of 2 blocks-worth of time might need to pass for the order in the batch to get processed.
 
 ```bash
 ...

@@ -4,19 +4,19 @@ At the end of each block, any batch of orders that has reached the end of its li
 
 Since the buy and sell prices are pre-calculated from when the buy and sell orders were added to the batch, there is no additional cancellations of buys or sells that will take place at this stage. However, swaps are processed on a first come first served basis and a swap is cancelled if it violates the sanity rates.
 
-In the case of `augmented_function` bonds, if the new bond supply after performing all orders is greater or equal to the initial supply \(`supply >= S0`\), the bond's state gets updated from `HATCH` to `OPEN` and sells are enabled \(`AllowSells=true`\).
+In the case of `augmented_function` wars, if the new war supply after performing all orders is greater or equal to the initial supply \(`supply >= S0`\), the war's state gets updated from `HATCH` to `OPEN` and sells are enabled \(`AllowSells=true`\).
 
 ## Buys
 
-Using the buy price stored in the batch, the following steps are followed for each buy order: 1. Mint and send `n` bond tokens to the buyer 2. Calculate total price`total = r + f` in reserve tokens 1. `r` is the price of buying `n` bond tokens 2. `f` is the transactional fee based on `r` 3. Send `r` to the reserve 4. Send `f` to the fee address 5. Send unused reserve tokens \(`maxPrices-total`\) back to buyer 6. Increase bond's current supply by `n`
+Using the buy price stored in the batch, the following steps are followed for each buy order: 1. Mint and send `n` war tokens to the buyer 2. Calculate total price`total = r + f` in reserve tokens 1. `r` is the price of buying `n` war tokens 2. `f` is the transactional fee based on `r` 3. Send `r` to the reserve 4. Send `f` to the fee address 5. Send unused reserve tokens \(`maxPrices-total`\) back to buyer 6. Increase war's current supply by `n`
 
 Note: the `maxPrices` reserve tokens were locked upon submitting the buy order.
 
 ## Sells
 
-Using the sell price stored in the batch, the following steps are followed for each sell order: 1. Calculate total returns `total = r - f` in reserve tokens 1. `r` is the return for selling `n` bond tokens 2. `f` is the transactional and exit fees based on `r` 2. Send `total` to the seller 3. Send `f` to the fee address 4. Decrease bond's current supply by `n`
+Using the sell price stored in the batch, the following steps are followed for each sell order: 1. Calculate total returns `total = r - f` in reserve tokens 1. `r` is the return for selling `n` war tokens 2. `f` is the transactional and exit fees based on `r` 2. Send `total` to the seller 3. Send `f` to the fee address 4. Decrease war's current supply by `n`
 
-Note: the `n` bond tokens were burned upon submitting the sell order.
+Note: the `n` war tokens were burned upon submitting the sell order.
 
 ## Swaps
 

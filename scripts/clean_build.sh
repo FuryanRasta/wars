@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-rm -rf "$HOME"/.bondsd
-rm -rf "$HOME"/.bondscli
+rm -rf "$HOME"/.wars
+rm -rf "$HOME"/.warscli
 
 make install # assumes currently in project directory
