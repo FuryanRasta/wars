@@ -1,4 +1,4 @@
-module github.com/warmage-sports/war
+module github.com/warmage-sports/wars
 
 go 1.13
 
