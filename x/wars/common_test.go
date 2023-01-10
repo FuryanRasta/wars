@@ -3,8 +3,8 @@ package wars_test
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/warmage-sports/wars/x/wars/app"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/app"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto/ed25519"
 	"github.com/tendermint/tendermint/libs/log"

@@ -9,8 +9,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/exported"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"github.com/warmage-sports/wars/x/wars/internal/keeper"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/internal/keeper"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	"github.com/tendermint/tendermint/crypto/ed25519"
 	"math/rand"
 )

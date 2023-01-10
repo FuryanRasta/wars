@@ -5,7 +5,7 @@ SCRIPTPATH="$(
 
 echo "Running simulation $1..."
 
-go test -mod=readonly github.com/warmage-sports/wars/x/wars/app \
+go test -mod=readonly github.com/mage-war/wars/x/wars/app \
   -run=TestFullAppSimulation \
   -v \
   -timeout 24h \

@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	"github.com/tendermint/tendermint/crypto/ed25519"
 	"math/rand"
 )

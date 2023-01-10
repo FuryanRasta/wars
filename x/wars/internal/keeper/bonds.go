@@ -3,7 +3,7 @@ package keeper
 import (
 	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/internal/types"
 )
 
 func (k Keeper) GetWarIterator(ctx sdk.Context) sdk.Iterator {

@@ -2,8 +2,8 @@ package wars_test
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/warmage-sports/wars/x/wars"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	"github.com/stretchr/testify/require"
 	"github.com/tendermint/tendermint/crypto/ed25519"
 	"testing"

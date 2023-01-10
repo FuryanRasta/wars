@@ -5,9 +5,9 @@ package wars
 // based on functionality in github.com/rigelrozanski/multitool
 
 import (
-	"github.com/warmage-sports/wars/x/wars/client"
-	"github.com/warmage-sports/wars/x/wars/internal/keeper"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/client"
+	"github.com/mage-war/wars/x/wars/internal/keeper"
+	"github.com/mage-war/wars/x/wars/internal/types"
 )
 
 const (

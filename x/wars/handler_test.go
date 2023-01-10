@@ -1,8 +1,8 @@
 package wars_test
 
 import (
-	"github.com/warmage-sports/wars/x/wars"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"

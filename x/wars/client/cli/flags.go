@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	flag "github.com/spf13/pflag"
 )
 

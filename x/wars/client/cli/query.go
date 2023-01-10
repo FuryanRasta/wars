@@ -3,8 +3,8 @@ package cli
 import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/warmage-sports/wars/x/wars/internal/keeper"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/internal/keeper"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client/context"

@@ -21,7 +21,7 @@ import (
 	"github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/libs/cli"
 
-	"github.com/warmage-sports/wars/x/wars/app"
+	"github.com/mage-war/wars/x/wars/app"
 )
 
 func main() {

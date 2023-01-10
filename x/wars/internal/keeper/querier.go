@@ -5,8 +5,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/warmage-sports/wars/x/wars/client"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/client"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 

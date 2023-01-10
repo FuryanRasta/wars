@@ -7,8 +7,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 	"github.com/gorilla/mux"
-	"github.com/warmage-sports/wars/x/wars/client"
-	"github.com/warmage-sports/wars/x/wars/internal/types"
+	"github.com/mage-war/wars/x/wars/client"
+	"github.com/mage-war/wars/x/wars/internal/types"
 	"net/http"
 	"strings"
 )
